@@ -1,0 +1,46 @@
+<div class="w-100 py-4 container1">
+
+  <nav class="navbar navbar-light m-auto">
+    <form class="form-inline w-75 m-auto" (ngSubmit)="getWeatherForecast()">
+      <div *ngIf="!isValid && searchCity" class="text-danger w-100">
+        English letters only.
+      </div>
+      <div class="row">
+        <input 
+          class="form-control mr-sm-2 mx-3 w-200px" 
+          type="text" 
+          placeholder="{{searchCity? searchCity: 'Search city'}}" 
+          aria-label="Search"
+          (keyup)="searchCity=$event.target.value; getAutoComplete();"
+          value="{{searchCity}}" 
+          pattern="[A-Za-z ]*"
+        >
+        <button [disabled]="!isSearch" class="btn btn-outline-primary w-80px" type="submit">Search</button>
+      </div>
+      <div class="w-100 m-auto position-absolute top-85" *ngIf="isAutoSearch">
+        <div class="dropdown-content p-2 ms-1 pointer" (click)="chooseCity(city)" *ngFor="let city of autoCompleteCities">{{city.name}}</div>
+      </div> 
+    </form>
+  </nav>
+
+  <div class="w-75 m-auto mt-3">
+    <div class="">
+      <button type="button" class="btn btn-outline-primary float-start pointer px-2 my-2"
+        (click)="isCelsius = !isCelsius">{{isCelsius? '°F': '°C'}} Degrees</button> 
+      <button type="button" class="btn btn-outline-primary float-end pointer px-2 my-2"
+        (click)="addOrRemoveFavorite()">{{isFavorite? 'Remove from': 'Add to'}} Favorites</button> 
+    </div>
+    <div class="text-center m-auto py-5">
+      <h3 class="text-primary py-4">{{cityName}} - {{isCelsius? weatherDegreeC + '°C': weatherDegreeF + '°F'}}</h3>
+      <h1 class="text-primary py-4">{{weatherText}}</h1>
+    </div>
+
+    <div class="border border-primary rounded p-3 m-2 w-card float-start min-h"
+        *ngFor="let day of daysOfForecasts">
+      <p class="text-primary text-center h4">{{day.date | date:'dd/MM/yyyy'}}</p>
+      <p class="text-primary text-center h5 mb-5">{{isCelsius? day.degreeC + '°C': day.degreeF + '°F'}}</p>
+      <p class="text-primary text-center h4">{{day.weather}}</p>
+    </div>
+  </div>
+
+</div>
